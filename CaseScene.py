@@ -26,7 +26,53 @@ class CaseScene():
             'mast/mast.csv',
             'wind section/wind_section.csv'
             ]
-        tie_release=0
-        calcsolve.case_reader(path,file_names[0],,file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
+
+        caseReader=calcsolve.case_reader(path,file_names[0],file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
         # unpickle
-        
+        with open('ReadData.pkl','wb') as r_data:
+            dictData=pickle.loads(r_data.read())
+
+        run_solve(path,dictData)
+
+    def run_solve(self,path,dictData):
+        tie_release=0
+        solverInTighten=calcsolve.case_solver(
+            dictData.get('Anchorage'),
+            dictData.get('Top load in serv'),
+            dictData.get('Wind force in serv'),
+            dictData.get('Wind force region in'),
+            dictData.get('Mast height'),
+            dictData.get('Top wind height')
+            dictData.get(tie_release)
+            )
+
+        solverOutTighten=calcsolve.case_solver(
+            dictData.get('Anchorage'),
+            dictData.get('Top load out serv'),
+            dictData.get('Wind force out serv'),
+            dictData.get('Wind force region out'),
+            dictData.get('Mast height'),
+            dictData.get('Top wind height')
+            dictData.get(tie_release)
+            )
+
+        tie_release=1
+        solverInReleased=calcsolve.case_solver(
+            dictData.get('Anchorage'),
+            dictData.get('Top load in serv'),
+            dictData.get('Wind force in serv'),
+            dictData.get('Wind force region in'),
+            dictData.get('Mast height'),
+            dictData.get('Top wind height')
+            dictData.get(tie_release)
+            )
+
+        solverOutReleased=calcsolve.case_solver(
+            dictData.get('Anchorage'),
+            dictData.get('Top load out serv'),
+            dictData.get('Wind force out serv'),
+            dictData.get('Wind force region out'),
+            dictData.get('Mast height'),
+            dictData.get('Top wind height')
+            dictData.get(tie_release)
+            )
