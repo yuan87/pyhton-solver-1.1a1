@@ -35,6 +35,7 @@ class CaseScene():
         run_solve(path,dictData)
 
     def run_solve(self,path,dictData):
+        # solve for in service and out of service, all anchora tighten and alt released configuration
         tie_release=0
         solverInTighten=calcsolve.case_solver(
             dictData.get('Anchorage'),
