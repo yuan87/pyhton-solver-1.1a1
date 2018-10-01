@@ -37,14 +37,17 @@ class CaseScene():
     def run_solve(self,path,dictData):
         # solve for in service and out of service, all anchora tighten and alt released configuration
         tie_release=0
+        strInService='In service'
+        strOutOfService='Out of service'
         solverInTighten=calcsolve.case_solver(
             dictData.get('Anchorage'),
             dictData.get('Top load in serv'),
             dictData.get('Wind force in serv'),
             dictData.get('Wind force region in'),
             dictData.get('Mast height'),
-            dictData.get('Top wind height')
-            dictData.get(tie_release)
+            dictData.get('Top wind height'),
+            tie_release,
+            strInService
             )
 
         solverOutTighten=calcsolve.case_solver(
@@ -53,8 +56,9 @@ class CaseScene():
             dictData.get('Wind force out serv'),
             dictData.get('Wind force region out'),
             dictData.get('Mast height'),
-            dictData.get('Top wind height')
-            dictData.get(tie_release)
+            dictData.get('Top wind height'),
+            tie_release,
+            strOutOfService
             )
 
         tie_release=1
@@ -64,8 +68,9 @@ class CaseScene():
             dictData.get('Wind force in serv'),
             dictData.get('Wind force region in'),
             dictData.get('Mast height'),
-            dictData.get('Top wind height')
-            dictData.get(tie_release)
+            dictData.get('Top wind height'),
+            tie_release,
+            strInService
             )
 
         solverOutReleased=calcsolve.case_solver(
@@ -74,6 +79,12 @@ class CaseScene():
             dictData.get('Wind force out serv'),
             dictData.get('Wind force region out'),
             dictData.get('Mast height'),
-            dictData.get('Top wind height')
-            dictData.get(tie_release)
+            dictData.get('Top wind height'),
+            tie_release,
+            strOutOfService
             )
+
+
+
+    gc.collect()
+	sys.exit()

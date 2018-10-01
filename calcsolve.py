@@ -41,7 +41,7 @@ def altenate_release2(listH):
 
 
 class case_solver():
-	def __init__(self,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release):
+	def __init__(self,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
 		'''
 		listAnchor = list anchorage height position
 		topLoad = top part moment , Fh , Fv (moment in tm, force in t)
@@ -59,6 +59,18 @@ class case_solver():
 		self.mastHeight=mastHeight
 		self.topWindHeight=topWindHeight
 		self.tie_release=tie_release
+		self.windCondition=windCondition
+
+		if (tie_release==1):
+			self.strTie='Alt released'
+		if (tie_release==0):
+			self.strTie='All tighten'
+
+		# Output title for current case
+		title='Mast Height %sm  Anchorage:%s  %s  %s'
+		title=title %(str(mastHeight),str(listAnchor0),self.strTie,self.windCondition)
+
+		self.title=title
 
 	def calc(self):
 		if (self.tie_release==1):
@@ -161,6 +173,22 @@ class case_solver():
 		print(l_fa_to_an)
 		self.l_fa_to_an=l_fa_to_an
 
+		tab_out=list(zip(self.listAnchor0,l_fa_to_an))
+
+		# pickle tab_out
+		outFile='OutpuTResult.pkl'
+		with open(outFile,'wb') as pk_out:
+			pickle.dump(tab_out,pk_out)
+
+
+		csv_out='OutputResult.csv'
+		with open(csv_out,'a') as c_out:
+			writer=csv.writer(c_out)
+			writer.writerow(self.title)
+			writer.writerow(self.listAnchor0)
+			writer.writerow(l_fa_to_an)
+
+
 
 	def alt_release_tie(self,listH):
 		listH0=listH[::-1]
@@ -213,7 +241,7 @@ class case_reader():
 		self.file_crane=file_crane
 		self.file_mast=file_mast
 		self.file_wind=file_wind
-		self.fieldnames=['Anchorage','Top load in serv','Wind force in serv','Wind force region in','Top load out serv','Wind force out serv','Wind force region in','Mast height','Top wind height']
+		self.fieldnames=['Anchorage','Top load in serv','Wind force in serv','Wind force region in','Top load out serv','Wind force out serv','Wind force region out','Mast height','Top wind height']
 
 		read_helper()
 
