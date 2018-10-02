@@ -86,5 +86,5 @@ class CaseScene():
 
 
 
-    gc.collect()
-	sys.exit()
+gc.collect()
+sys.exit()
