@@ -476,7 +476,7 @@ class case_reader():
 
 
 if __name__=='__main__':
-
+	pass
 	###>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Below lines are restructured to class case_reader > read_helper <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<##
 	# path=str(os.path.dirname(os.path.abspath(__file__)))
 	# csv_main=path.replace('\\','/')+'/'+'main.csv'
@@ -694,9 +694,9 @@ if __name__=='__main__':
 	#in_service_case.output_table()
 
 
-	in_service_case_alt=case_solver(collarHeight,R_IN_SERV,lWindForceI[0],lWindForceI[1],mastHeight,topWindHeight,1)
-	in_service_case_alt.calc()
-	l_in_service_alt=in_service_case_alt.output_table()
+	# in_service_case_alt=case_solver(collarHeight,R_IN_SERV,lWindForceI[0],lWindForceI[1],mastHeight,topWindHeight,1)
+	# in_service_case_alt.calc()
+	# l_in_service_alt=in_service_case_alt.output_table()
 
 	#
 

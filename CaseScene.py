@@ -10,7 +10,11 @@ import calcsolve
 gc.enable()
 
 
-class CaseScene():
+class CaseSceneIns():
+    '''
+    This class is function as create instances of case_reader and case_solver, ie: create creating different case
+    Define working condition and cases here
+    '''
 
     def __init__(self):
         path0=str(os.path.dirname(os.path.abspath(__file__)))
