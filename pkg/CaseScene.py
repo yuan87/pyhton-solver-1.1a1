@@ -5,7 +5,8 @@ import os
 import gc
 import pickle
 # case_solver class and case_reader class
-import calcsolve
+from pkg.calcsolve import case_solver
+from pkg.calcsolve import case_reader
 
 gc.enable()
 
@@ -16,9 +17,11 @@ class CaseSceneIns():
     Define working condition and cases here
     '''
 
-    def __init__(self):
-        path0=str(os.path.dirname(os.path.abspath(__file__)))
-        path=path.replace('\\','/')+'/'
+    def __init__(self,path_text):
+
+        # path0=str(os.path.dirname(os.path.abspath(__file__)))
+        # path=path.replace('\\','/')+'/'
+        self.path_text=path_text
 
         file_names=[
             'main.csv',
@@ -31,12 +34,12 @@ class CaseSceneIns():
             'wind section/wind_section.csv'
             ]
 
-        caseReader=calcsolve.case_reader(path,file_names[0],file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
+        caseReader=calcsolve.case_reader(self.path_text,file_names[0],file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
         # unpickle
-        with open('ReadData.pkl','wb') as r_data:
+        with open(self.path_text+'ReadData.pkl','wb') as r_data:
             dictData=pickle.loads(r_data.read())
 
-        run_solve(path,dictData)
+        run_solve(self.path_text,dictData)
 
     def run_solve(self,path,dictData):
         # solve for in service and out of service, all anchora tighten and alt released configuration
@@ -44,6 +47,7 @@ class CaseSceneIns():
         strInService='In service'
         strOutOfService='Out of service'
         solverInTighten=calcsolve.case_solver(
+            path,
             dictData.get('Anchorage'),
             dictData.get('Top load in serv'),
             dictData.get('Wind force in serv'),
@@ -55,6 +59,7 @@ class CaseSceneIns():
             )
 
         solverOutTighten=calcsolve.case_solver(
+            path,
             dictData.get('Anchorage'),
             dictData.get('Top load out serv'),
             dictData.get('Wind force out serv'),
@@ -67,6 +72,7 @@ class CaseSceneIns():
 
         tie_release=1
         solverInReleased=calcsolve.case_solver(
+            path,
             dictData.get('Anchorage'),
             dictData.get('Top load in serv'),
             dictData.get('Wind force in serv'),
@@ -78,6 +84,7 @@ class CaseSceneIns():
             )
 
         solverOutReleased=calcsolve.case_solver(
+            path,
             dictData.get('Anchorage'),
             dictData.get('Top load out serv'),
             dictData.get('Wind force out serv'),

@@ -8,6 +8,7 @@ import gc
 import pandas as pd
 import pickle
 
+
 gc.enable()
 
 # alternate release tie back? Y=1, N=0
@@ -41,7 +42,7 @@ def altenate_release2(listH):
 
 
 class case_solver():
-	def __init__(self,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
+	def __init__(self,path_text,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
 		'''
 		listAnchor = list anchorage height position
 		topLoad = top part moment , Fh , Fv (moment in tm, force in t)
@@ -52,6 +53,7 @@ class case_solver():
 		tie_release =
 		'''
 
+		self.path_text=path_text
 		self.listAnchor0=listAnchor0
 		self.topLoad=topLoad
 		self.windForce=windForce				#list
@@ -176,12 +178,12 @@ class case_solver():
 		tab_out=list(zip(self.listAnchor0,l_fa_to_an))
 
 		# pickle tab_out
-		outFile='OutpuTResult.pkl'
+		outFile=self.path_text+'OutpuTResult.pkl'
 		with open(outFile,'wb') as pk_out:
 			pickle.dump(tab_out,pk_out)
 
 
-		csv_out='OutputResult.csv'
+		csv_out=self.path_text+'OutputResult.csv'
 		with open(csv_out,'a') as c_out:
 			writer=csv.writer(c_out)
 			writer.writerow(self.title)
@@ -198,20 +200,7 @@ class case_solver():
 
 
 
-# return list of wind forces value, and height of wind forces value start change
-def get_wind_force_height(inlst):
-	lstR=list()
-	lst1=list()
-	lstCount=list()
-	count1=0
-	for a in inlst:
-		if a not in lst1:
-			lst1.append(a)
-			lstCount.append(count1)
-		count1+=1
-	lstR.append(lst1)
-	lstR.append(lstCount)
-	return lstR
+
 
 #path=str(os.path.dirname(os.path.abspath(__file__)))
 #path_text=path.replace('\\','/')+'/'
@@ -231,7 +220,7 @@ class case_reader():
 	topWindHeight =
 	tie_release =
 	'''
-	def __init__(path_text,file_main,file_ma_conf,file_misc,file_dictionary,dir_crane,file_crane,file_mast,file_wind):
+	def __init__(self,path_text,file_main,file_ma_conf,file_misc,file_dictionary,dir_crane,file_crane,file_mast,file_wind):
 		self.path_text=path_text
 		self.file_main=file_main
 		self.file_ma_conf=file_ma_conf
@@ -244,6 +233,21 @@ class case_reader():
 		self.fieldnames=['Anchorage','Top load in serv','Wind force in serv','Wind force region in','Top load out serv','Wind force out serv','Wind force region out','Mast height','Top wind height']
 
 		read_helper()
+
+	# return list of wind forces value, and height of wind forces value start change
+	def get_wind_force_height(self,inlst):
+		lstR=list()
+		lst1=list()
+		lstCount=list()
+		count1=0
+		for a in inlst:
+			if a not in lst1:
+				lst1.append(a)
+				lstCount.append(count1)
+			count1+=1
+		lstR.append(lst1)
+		lstR.append(lstCount)
+		return lstR
 
 	def read_helper(self):
 		csv_main=self.path_text+self.file_main
