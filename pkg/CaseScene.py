@@ -5,8 +5,11 @@ import os
 import gc
 import pickle
 # case_solver class and case_reader class
-from pkg.calcsolve import case_solver
-from pkg.calcsolve import case_reader
+# from pkg.calcsolve import case_solver
+# from pkg.calcsolve import case_reader
+from .calcsolve import *
+
+
 
 gc.enable()
 
