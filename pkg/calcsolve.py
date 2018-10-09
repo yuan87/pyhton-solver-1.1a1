@@ -8,7 +8,7 @@ import gc
 import pandas as pd
 import pickle
 
-print('Import  calcsolve.py')
+
 gc.enable()
 
 # alternate release tie back? Y=1, N=0
@@ -232,7 +232,7 @@ class case_reader():
 		self.file_wind=file_wind
 		self.fieldnames=['Anchorage','Top load in serv','Wind force in serv','Wind force region in','Top load out serv','Wind force out serv','Wind force region out','Mast height','Top wind height']
 
-		read_helper()
+		self.read_helper()
 
 	# return list of wind forces value, and height of wind forces value start change
 	def get_wind_force_height(self,inlst):
@@ -268,17 +268,19 @@ class case_reader():
 
 		l_ma_conf=list(l_ma_conf)
 
-		mastTypeNo=len(list(filter(bool,l_ma_conf[2])))-1
+		mastTypeNo=len(list(filter(bool,l_ma_conf[0])))-1
 
 		mastType=list()
 
 		mastQuantity=list()
+
 		for i in range(1,mastTypeNo+1):
-			mastType.append(int(l_ma_conf[3][i]))
-			mastQuantity.append(float(l_ma_conf[4][i]))
 
+			mastType.append(int(l_ma_conf[1][i]))
+			mastQuantity.append(float(l_ma_conf[2][i]))
 
-		collarHeight0=(filter(bool,l_ma_conf[5][1:]))
+		print(l_ma_conf)
+		collarHeight0=(filter(bool,l_ma_conf[3][1:]))
 		collarHeight=list(map(lambda a0:float(a0),collarHeight0))
 
 		csv_misc=self.path_text+self.file_misc
@@ -294,9 +296,22 @@ class case_reader():
 		topWindHeight=addHeight2
 
 		dictionary_file=self.path_text+self.file_dictionary
-		exec(open(dictionary_file).read())
+
+
+		exec(open(dictionary_file,'r').read())
+		print(open(dictionary_file,'r').read())
+		#with open(dictionary_file,'r') as dFile:
+		#	exec(dFile.read())
 		# dMast
 		# dCrane
+		# print(locals())
+		dMast=locals()['dMast']
+		dCrane=locals()['dCrane']
+		print(dMast)
+		print(dCrane)
+
+
+
 
 
 		# get crane model Eg: STT293 or STL230
@@ -479,8 +494,8 @@ class case_reader():
 
 
 
-if __name__=='__main__':
-	pass
+# if __name__=='__main__':
+# 	pass
 	###>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Below lines are restructured to class case_reader > read_helper <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<##
 	# path=str(os.path.dirname(os.path.abspath(__file__)))
 	# csv_main=path.replace('\\','/')+'/'+'main.csv'
@@ -704,5 +719,5 @@ if __name__=='__main__':
 
 	#
 
-	gc.collect()
-	sys.exit()
+gc.collect()
+# sys.exit()

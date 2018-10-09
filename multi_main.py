@@ -6,7 +6,6 @@ import gc
 from pkg.CaseScene import CaseSceneIns
 
 
-
 gc.enable()
 
 def runCase(nLoop):
@@ -20,6 +19,7 @@ def runCase(nLoop):
 	l_TitleMastType=['each mast no']+l_mastType[nLoop+1]
 	l_write.append(l_TitleMastType)
 	l_TitleAnchor=['collar height']+lm_anchor[nLoop]
+	l_write.append(l_TitleAnchor)
 
 
 	with open(csv_WriteConf,'w') as c_WriteConf:
@@ -27,7 +27,9 @@ def runCase(nLoop):
 		for ll in l_write:
 			confWriter.writerow(ll)
 
-	CaseSceneIns(path_text)
+
+	cs=CaseSceneIns(path_text)
+
 
 
 if __name__=='__main__':
