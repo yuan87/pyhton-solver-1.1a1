@@ -4,6 +4,7 @@ import csv
 import os
 import gc
 import pickle
+import json
 # case_solver class and case_reader class
 # from pkg.calcsolve import case_solver
 # from pkg.calcsolve import case_reader
@@ -25,12 +26,12 @@ class CaseSceneIns():
         # path0=str(os.path.dirname(os.path.abspath(__file__)))
         # path=path.replace('\\','/')+'/'
         self.path_text=path_text
-        
+
         file_names=[
             'main.csv',
             'mast_achor_conf.csv',
             'misc.csv',
-            'dictionary.py',
+            'dictionary.json',
             'crane/',
             '.csv',
             'mast/mast.csv',
@@ -39,10 +40,11 @@ class CaseSceneIns():
 
         caseReader=case_reader(self.path_text,file_names[0],file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
         # unpickle
-        with open(self.path_text+'ReadData.pkl','wb') as r_data:
+        with open(self.path_text+'ReadData.pkl','rb') as r_data:
             dictData=pickle.loads(r_data.read())
+        # dictData=caseReader.dictData
 
-        run_solve(self.path_text,dictData)
+        self.run_solve(self.path_text,dictData)
 
 
     def run_solve(self,path,dictData):
@@ -103,4 +105,3 @@ class CaseSceneIns():
 
 
 gc.collect()
-# sys.exit()

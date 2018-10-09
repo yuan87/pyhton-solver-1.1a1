@@ -7,6 +7,7 @@ import math
 import gc
 import pandas as pd
 import pickle
+import json
 
 
 gc.enable()
@@ -63,16 +64,20 @@ class case_solver():
 		self.tie_release=tie_release
 		self.windCondition=windCondition
 
+		# print(self.path_text,self.listAnchor0,self.topLoad,self.windForce,self.windForceRegion,self.mastHeight,self.topWindHeight,self.tie_release,self.windCondition,'\n\n')
+
 		if (tie_release==1):
 			self.strTie='Alt released'
 		if (tie_release==0):
 			self.strTie='All tighten'
 
 		# Output title for current case
-		title='Mast Height %sm  Anchorage:%s  %s  %s'
+		title='Mast Height %sm,  Anchorage:%s,  %s,  %s'
 		title=title %(str(mastHeight),str(listAnchor0),self.strTie,self.windCondition)
 
 		self.title=title
+		self.calc()
+		self.output_table()
 
 	def calc(self):
 		if (self.tie_release==1):
@@ -186,7 +191,7 @@ class case_solver():
 		csv_out=self.path_text+'OutputResult.csv'
 		with open(csv_out,'a') as c_out:
 			writer=csv.writer(c_out)
-			writer.writerow(self.title)
+			writer.writerow([self.title])
 			writer.writerow(self.listAnchor0)
 			writer.writerow(l_fa_to_an)
 
@@ -198,7 +203,20 @@ class case_solver():
 		listH0.reverse()
 		return listH0
 
-
+# return list of wind forces value, and height of wind forces value start change
+def get_wind_force_height(inlst):
+	lstR=list()
+	lst1=list()
+	lstCount=list()
+	count1=0
+	for a in inlst:
+		if a not in lst1:
+			lst1.append(a)
+			lstCount.append(count1)
+		count1+=1
+	lstR.append(lst1)
+	lstR.append(lstCount)
+	return lstR
 
 
 
@@ -234,20 +252,7 @@ class case_reader():
 
 		self.read_helper()
 
-	# return list of wind forces value, and height of wind forces value start change
-	def get_wind_force_height(self,inlst):
-		lstR=list()
-		lst1=list()
-		lstCount=list()
-		count1=0
-		for a in inlst:
-			if a not in lst1:
-				lst1.append(a)
-				lstCount.append(count1)
-			count1+=1
-		lstR.append(lst1)
-		lstR.append(lstCount)
-		return lstR
+
 
 	def read_helper(self):
 		csv_main=self.path_text+self.file_main
@@ -279,7 +284,7 @@ class case_reader():
 			mastType.append(int(l_ma_conf[1][i]))
 			mastQuantity.append(float(l_ma_conf[2][i]))
 
-		print(l_ma_conf)
+		# print(l_ma_conf)
 		collarHeight0=(filter(bool,l_ma_conf[3][1:]))
 		collarHeight=list(map(lambda a0:float(a0),collarHeight0))
 
@@ -298,21 +303,20 @@ class case_reader():
 		dictionary_file=self.path_text+self.file_dictionary
 
 
-		exec(open(dictionary_file,'r').read())
-		print(open(dictionary_file,'r').read())
-		#with open(dictionary_file,'r') as dFile:
-		#	exec(dFile.read())
+		with open(dictionary_file,'r') as df:
+			strdf=df.read()
+		dict0=json.loads(strdf)
+
 		# dMast
 		# dCrane
-		# print(locals())
-		dMast=locals()['dMast']
-		dCrane=locals()['dCrane']
-		print(dMast)
-		print(dCrane)
-
-
-
-
+		dCrane0=dict0['dCrane']['list']
+		dMast0=dict0['dMast']['list']
+		dCrane={}
+		for d1 in dCrane0:
+			dCrane.update(d1)
+		dMast={}
+		for d2 in dMast0:
+			dMast.update(d2)
 
 		# get crane model Eg: STT293 or STL230
 		for indexCrane, nameCrane in dCrane.items():
@@ -482,11 +486,13 @@ class case_reader():
 		lData.append(lWindForceO[1])
 		lData.append(mastHeight)
 		lData.append(topWindHeight)
-		dictData=dict(zip(self.fieldnames,lData))
+		self.dictData=dict(zip(self.fieldnames,lData))
+
 		# output read_helper data to  pickle
-		pkl_read_data=path_text+'ReadData.pkl'
+		pkl_read_data=self.path_text+'ReadData.pkl'
 		with open(pkl_read_data,'wb') as c_read_data:
-			pickle.dump(dictData,c_read_data)
+			pickle.dump(self.dictData,c_read_data)
+
 
 
 
@@ -720,4 +726,3 @@ class case_reader():
 	#
 
 gc.collect()
-# sys.exit()
