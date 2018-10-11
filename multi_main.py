@@ -4,6 +4,7 @@ import os
 #import pickle
 import gc
 from pkg.CaseScene import CaseSceneIns
+import pandas as pd
 
 
 gc.enable()
@@ -21,7 +22,6 @@ def runCase(nLoop):
 	l_TitleAnchor=['collar height']+lm_anchor[nLoop]
 	l_write.append(l_TitleAnchor)
 
-
 	with open(csv_WriteConf,'w') as c_WriteConf:
 		confWriter=csv.writer(c_WriteConf,delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
 		for ll in l_write:
@@ -29,6 +29,10 @@ def runCase(nLoop):
 
 
 	cs=CaseSceneIns(path_text)
+
+	mastHeight,rList=cs.get_result()
+
+
 
 
 

@@ -1,5 +1,5 @@
 import sys
-
+import pandas as pd
 import csv
 import os
 import gc
@@ -64,6 +64,8 @@ class CaseSceneIns():
             tie_release,
             strInService
             )
+        rInTighten=solverInTighten.output_table()
+
 
         solverOutTighten=case_solver(
             path,
@@ -76,6 +78,8 @@ class CaseSceneIns():
             tie_release,
             strOutOfService
             )
+        rOutTighten=solverOutTighten.output_table()
+
 
         tie_release=1
         solverInReleased=case_solver(
@@ -89,6 +93,8 @@ class CaseSceneIns():
             tie_release,
             strInService
             )
+        rInReleased=solverInReleased.output_table()
+
 
         solverOutReleased=case_solver(
             path,
@@ -101,6 +107,14 @@ class CaseSceneIns():
             tie_release,
             strOutOfService
             )
+        rOutReleased=solverOutReleased.output_table()
+
+        self.dictData=dictData
+        self.rList=[rInTighten,rOutTighten,rInReleased,rOutReleased]
+
+    def get_result(self):
+        return str(self.dictData.get('Mast height')),self.rList
+
 
 
 

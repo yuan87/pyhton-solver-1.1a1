@@ -77,7 +77,7 @@ class case_solver():
 
 		self.title=title
 		self.calc()
-		self.output_table()
+
 
 	def calc(self):
 		if (self.tie_release==1):
@@ -155,14 +155,15 @@ class case_solver():
 
 
 		arr_fa=np.linalg.solve(np.array(l_dA),np.array(l_de))
-		l_fa=arr_fa.tolist()
+		# arr_fa value change to int in list format
+		l_fa=list(map(lambda f:int(f),arr_fa.tolist()))
+
 
 		# print(l_fa)
 
 		# zip height input and anchorage reaction together for output as a table
-		tab_fa=list(zip(self.listAnchor,l_fa))
+		self.tab_fa=list(zip(self.listAnchor,l_fa))
 
-		self.tab_fa=tab_fa
 
 
 	def output_table(self):
@@ -177,25 +178,24 @@ class case_solver():
 			if not boo:
 				l_fa_to_an.append((anchor,'-'))
 
-		print(l_fa_to_an)
+		# print(l_fa_to_an)
 		self.l_fa_to_an=l_fa_to_an
 
-		tab_out=list(zip(self.listAnchor0,l_fa_to_an))
-
 		# pickle tab_out
-		outFile=self.path_text+'OutpuTResult.pkl'
-		with open(outFile,'wb') as pk_out:
-			pickle.dump(tab_out,pk_out)
+		# outFile=self.path_text+'OutpuTResult.pkl'
+		# with open(outFile,'wb') as pk_out:
+		# 	pickle.dump(self.l_fa_to_an,pk_out)
 
-
+		###
 		csv_out=self.path_text+'OutputResult.csv'
 		with open(csv_out,'a') as c_out:
 			writer=csv.writer(c_out)
 			writer.writerow([self.title])
-			writer.writerow(self.listAnchor0)
+			# writer.writerow(self.listAnchor0)
 			writer.writerow(l_fa_to_an)
 
-
+		# return result
+		return l_fa_to_an
 
 	def alt_release_tie(self,listH):
 		listH0=listH[::-1]
@@ -273,7 +273,8 @@ class case_reader():
 
 		l_ma_conf=list(l_ma_conf)
 
-		mastTypeNo=len(list(filter(bool,l_ma_conf[0])))-1
+
+		mastTypeNo=int(list(filter(bool,l_ma_conf[0]))[1])
 
 		mastType=list()
 
