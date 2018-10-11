@@ -193,9 +193,9 @@ class case_solver():
 			writer.writerow([self.title])
 			# writer.writerow(self.listAnchor0)
 			writer.writerow(l_fa_to_an)
-
+		
 		# return result
-		return l_fa_to_an
+		return list(map(lambda ls: list(ls),l_fa_to_an))
 
 	def alt_release_tie(self,listH):
 		listH0=listH[::-1]

@@ -32,8 +32,34 @@ def runCase(nLoop):
 
 	mastHeight,rList=cs.get_result()
 
+	# rList=[rInTighten,rOutTighten,rInReleased,rOutReleased]
+	lInTighten=[mastHeight,rList[0]]
+	lOutTighten=[mastHeight,rList[1]]
+	lInReleased=[mastHeight,rList[2]]
+	lOutReleased=[mastHeight,rList[3]]
+
+	if(nLoop==0):
+		alst00=rList[0]
+		alst01=rList[1]
+		alst02=rList[2]
+		alst03=rList[3]
+	else:
+		alst00=alst00+rList[0]+['']
+		alst01=alst01+rList[1]+['']
+		alst02=alst02+rList[2]+['']
+		alst03=alst03+rList[3]+['']
 
 
+
+
+	nLoop+=1
+
+
+
+alst00=list()
+alst01=list()
+alst02=list()
+alst03=list()
 
 
 if __name__=='__main__':
@@ -102,8 +128,11 @@ if __name__=='__main__':
 		c_out.truncate()
 
 
+
 	for nLoop in range(0,noOfStage-1):
 		runCase(nLoop)
+
+	print(alst00)
 
 gc.collect()
 sys.exit()
