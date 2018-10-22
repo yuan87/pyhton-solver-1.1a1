@@ -38,28 +38,20 @@ def runCase(nLoop):
 	lInReleased=[mastHeight,rList[2]]
 	lOutReleased=[mastHeight,rList[3]]
 
-	if(nLoop==0):
-		alst00=rList[0]
-		alst01=rList[1]
-		alst02=rList[2]
-		alst03=rList[3]
-	else:
-		alst00=alst00+rList[0]+['']
-		alst01=alst01+rList[1]+['']
-		alst02=alst02+rList[2]+['']
-		alst03=alst03+rList[3]+['']
+	alst000=list(map(lambda i0: i0 + [''],rList[0]))
+	alst001=list(map(lambda i0: i0 + [''],rList[1]))
+	alst002=list(map(lambda i0: i0 + [''],rList[2]))
+	alst003=list(map(lambda i0: i0 + [''],rList[3]))
 
 
+	alst00.append(alst000)
+	alst01.append(alst001)
+	alst02.append(alst002)
+	alst03.append(alst003)
 
 
 	nLoop+=1
 
-
-
-alst00=list()
-alst01=list()
-alst02=list()
-alst03=list()
 
 
 if __name__=='__main__':
@@ -121,18 +113,22 @@ if __name__=='__main__':
 	ma_conf=list(map(lambda bList: list(filter(bool,bList)),lm[:2]))
 
 
-
 	# clear 'OutputResult.csv' content
 	csv_out=path_text+'OutputResult.csv'
 	with open(csv_out,'w+') as c_out:
 		c_out.truncate()
 
+	alst00=list()
+	alst01=list()
+	alst02=list()
+	alst03=list()
 
 
 	for nLoop in range(0,noOfStage-1):
 		runCase(nLoop)
 
-	print(alst00)
+	for ff in alst00:
+		print(str(ff)+'\n')
 
 gc.collect()
 sys.exit()
