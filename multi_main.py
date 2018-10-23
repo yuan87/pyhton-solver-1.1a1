@@ -52,6 +52,71 @@ def runCase(nLoop):
 
 	nLoop+=1
 
+def output():
+
+
+	lststr=[['Stage '+str(i),'',''] for i in range(2,nS+2)]
+
+	lststr1=list()
+	for li in lststr:
+		lststr1.extend(li)
+
+
+	alst0=[lststr1]+format_list(alst00)
+	alst1=[lststr1]+format_list(alst01)
+	alst2=[lststr1]+format_list(alst02)
+	alst3=[lststr1]+format_list(alst03)
+	print(alst0)
+
+	c_out0=path_text+'In service -all tighten.csv'
+	c_out1=path_text+'Out service -all tighten.csv'
+	c_out2=path_text+'In service -alt released.csv'
+	c_out3=path_text+'Out service -alt released.csv'
+	with open(c_out0,'w') as c_in_tighten:
+		writer=csv.writer(c_in_tighten)
+		for rows in alst0:
+			writer.writerow(rows)
+	with open(c_out1,'w') as c_out_tighten:
+		writer=csv.writer(c_out_tighten)
+		for rows in alst1:
+			writer.writerow(rows)
+	with open(c_out2,'w') as c_in_released:
+		writer=csv.writer(c_in_released)
+		for rows in alst2:
+			writer.writerow(rows)
+	with open(c_out3,'w') as c_out_released:
+		writer=csv.writer(c_out_released)
+		for rows in alst3:
+			writer.writerow(rows)
+
+
+
+
+def format_list(lst):
+	arr0=list()
+	for n0 in range(0,nS):
+		arr=lst[n0]
+		for n1 in range(0,nS):
+			if(len(arr)<n1+1):
+				arr.append('')
+		arr0.append(arr)
+
+	arr1=list(map(list,zip(*arr0)))
+	arr1.reverse()
+	arr1=list(map(lambda l0:l0[::-1],arr1))
+	al0=list()
+	al1=list()
+	for l0 in arr1:
+
+		for e in l0:
+			if e=='':
+				al0.extend(['','',''])
+			else:
+				al0.extend(e)
+		al1.append(list(al0))
+		al0=list()
+	return al1
+
 
 
 if __name__=='__main__':
@@ -127,8 +192,14 @@ if __name__=='__main__':
 	for nLoop in range(0,noOfStage-1):
 		runCase(nLoop)
 
-	for ff in alst00:
-		print(str(ff)+'\n')
+	nS=noOfStage-1
+
+	alst00.reverse()
+	alst01.reverse()
+	alst02.reverse()
+	alst03.reverse()
+
+	output()
 
 gc.collect()
 sys.exit()
