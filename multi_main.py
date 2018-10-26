@@ -5,6 +5,7 @@ import os
 import gc
 from pkg.CaseScene import CaseSceneIns
 import pandas as pd
+from IPython.display import display, HTML
 
 
 gc.enable()
@@ -66,12 +67,14 @@ def output():
 	alst1=[lststr1]+format_list(alst01)
 	alst2=[lststr1]+format_list(alst02)
 	alst3=[lststr1]+format_list(alst03)
-	print(alst0)
 
-	c_out0=path_text+'In service -all tighten.csv'
-	c_out1=path_text+'Out service -all tighten.csv'
-	c_out2=path_text+'In service -alt released.csv'
-	c_out3=path_text+'Out service -alt released.csv'
+	df0=pd.DataFrame(alst0)
+	display(df0)
+
+	c_out0=path_text+'0 In service -all tighten.csv'
+	c_out1=path_text+'0 Out service -all tighten.csv'
+	c_out2=path_text+'0 In service -alt released.csv'
+	c_out3=path_text+'0 Out service -alt released.csv'
 	with open(c_out0,'w') as c_in_tighten:
 		writer=csv.writer(c_in_tighten)
 		for rows in alst0:
@@ -117,12 +120,26 @@ def format_list(lst):
 		al0=list()
 	return al1
 
-
+def is_kernel():
+	"""
+	This function check this file is execute for kernel(Jupyter Note, Ipython)
+	Return True is execute from kernel
+	"""
+	if 'IPython' not in sys.modules:
+		# IPython hasn't been imported, definitely not
+		return False
+	from IPython import get_ipython
+	# check for `kernel` attribute on the IPython instance
+	return getattr(get_ipython(), 'kernel', None) is not None
 
 if __name__=='__main__':
 
+	run_from_kernel=is_kernel()
 
-	path=str(os.path.dirname(os.path.abspath(__file__)))
+	if run_from_kernel:
+		path=input('Please key in file location (Folder)')
+	else:
+		path=str(os.path.dirname(os.path.abspath(__file__)))
 	path_text=path.replace('\\','/')+'/'
 	# path_text='D:/TYS/Project/python solver 1.1/'
 	csv_multi=path_text+'MultipleInput.csv'
