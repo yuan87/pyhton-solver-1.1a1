@@ -12,6 +12,8 @@ import json
 
 gc.enable()
 
+
+lstAnsysData=[None]*16
 # alternate release tie back? Y=1, N=0
 #release_tie=1
 
@@ -193,7 +195,7 @@ class case_solver():
 			writer.writerow([self.title])
 			# writer.writerow(self.listAnchor0)
 			writer.writerow(l_fa_to_an)
-		
+
 		# return result
 		return list(map(lambda ls: list(ls),l_fa_to_an))
 
@@ -497,7 +499,7 @@ class case_reader():
 
 
 
-
+	def ansys_data(self):
 
 
 

@@ -1,3 +1,6 @@
+import gc
+
+
 
 apdlTxt="""
 FINISH
@@ -150,3 +153,42 @@ FINI
 /VIEW,1,,-1
 /ANG,1
 """
+
+lstAnsysData=[None]*16
+
+gc.enable()
+
+class solveansys:
+    def __init__(self,path_text,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
+        """
+        """
+        self.path_text=path_text
+		self.listAnchor0=listAnchor0
+		self.topLoad=topLoad
+		self.windForce=windForce				#list
+		self.windForceRegion=windForceRegion		#list
+		self.mastHeight=mastHeight
+		self.topWindHeight=topWindHeight
+		self.tie_release=tie_release
+		self.windCondition=windCondition
+
+    def parameteransys(self):
+
+        apdlTxt=apdlTxt %(
+            str(moment),
+            str(force_horizontal),
+            str(___),
+            str(___),
+            str(len(self.listAnchor0)),
+            str(len(self.listAnchor0)+n_mast_type+1),
+            listTostr(mastQuantity),
+            listTostr(mastLength),
+            listTostr(mastWindArea),
+            listTostr(mastC0),
+            listTostr(mastH),
+            listTostr(mastXSection),
+            listTostr(mastIyy),
+            listTostr(mastIzz),
+            listTostr(hAnchorage),
+            listTostr(Z_coor)
+            )
