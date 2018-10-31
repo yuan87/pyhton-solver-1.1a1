@@ -13,7 +13,7 @@ import json
 gc.enable()
 
 
-lstAnsysData=[None]*16
+
 # alternate release tie back? Y=1, N=0
 #release_tie=1
 
@@ -26,6 +26,7 @@ wa_coef=1.2
 
 ########
 gravity=10
+steel_density=7850
 ########
 
 def altenate_release2(listH):
@@ -42,7 +43,16 @@ def altenate_release2(listH):
 
 	return listH0
 
-
+# def listTostr(lst):
+# 	if len(lst)==1:
+# 		return str(lst[0])
+# 	else:
+# 		outstr=str(lst[0])
+# 		slicedlst=lst[1:]
+# 		for j in slicedlst:
+# 			outstr+=(','+str(j))
+# 		return outstr
+#
 
 class case_solver():
 	def __init__(self,path_text,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
@@ -167,6 +177,14 @@ class case_solver():
 		self.tab_fa=list(zip(self.listAnchor,l_fa))
 
 
+		out_lst.append(str(self.topLoad[0]))
+		out_lst.append(str(self.topLoad[1]))
+		out_lst.append(str(self.topLoad[2]))
+		out_lst.append(str(len(self.listAnchor)))
+		out_lst.append(self.listAnchor)
+
+
+
 
 	def output_table(self):
 		l_fa_to_an=list()
@@ -204,6 +222,10 @@ class case_solver():
 		listH0=listH0[::2]
 		listH0.reverse()
 		return listH0
+
+	def get_ansys_data(self):
+		return self.out_lst
+
 
 # return list of wind forces value, and height of wind forces value start change
 def get_wind_force_height(inlst):
@@ -251,6 +273,7 @@ class case_reader():
 		self.file_mast=file_mast
 		self.file_wind=file_wind
 		self.fieldnames=['Anchorage','Top load in serv','Wind force in serv','Wind force region in','Top load out serv','Wind force out serv','Wind force region out','Mast height','Top wind height']
+		self.out_lst=list()
 
 		self.read_helper()
 
@@ -496,10 +519,28 @@ class case_reader():
 		with open(pkl_read_data,'wb') as c_read_data:
 			pickle.dump(self.dictData,c_read_data)
 
+		lmastH=list()
+		lstLen=[ele.get('length') for ele in mastProps]
+		sumProduct=float()
+		for mq,ll in (zip(mastQuantity,lstLen)):
+			product=mq*ll
+			sumProduct+=product
+			lmastH.append(sumProduct)
+		lmastH0=[0].extend(lmastH)
 
+		out_lst.append(“windpressure”)
+		out_lst.append(str(mastTypeNo))
+		out_lst.append((mastQuantity))
+		out_lst.append([item[0] for item in mastProp]) # length
+		out_lst.append([item[2] for item in mastProp]) # mast wind area
+		out_lst.append([item[1]/item[0]/item[3]/4/steel_density for item in mastProp]) # mast weight / mast length / main chord x-section / 4 / steel density
+		out_lst.append(lmastH) # list of  0, base mast height postion (top), base mast 2 height postion (top), standard mast height postion (top)
+		out_lst.append([item[3] for item in mastProp]) # mast X-section
+		out_lst.append([item[4] for item in mastProp]) # mast Iyy
+		out_lst.append([item[5] for item in mastProp]) # mast Izz
 
-
-	def ansys_data(self):
+	def get_ansys_data(self):
+		return self.out_lst
 
 
 

@@ -1,5 +1,5 @@
 import gc
-
+import os, subprocess
 
 
 apdlTxt="""
@@ -154,41 +154,60 @@ FINI
 /ANG,1
 """
 
-lstAnsysData=[None]*16
+
 
 gc.enable()
 
 class solveansys:
-    def __init__(self,path_text,listAnchor0,topLoad,windForce,windForceRegion,mastHeight,topWindHeight,tie_release,windCondition):
+
+
+    def __init__(self,apdlParam):
         """
         """
-        self.path_text=path_text
-		self.listAnchor0=listAnchor0
-		self.topLoad=topLoad
-		self.windForce=windForce				#list
-		self.windForceRegion=windForceRegion		#list
-		self.mastHeight=mastHeight
-		self.topWindHeight=topWindHeight
-		self.tie_release=tie_release
-		self.windCondition=windCondition
+        self.moment=apdlParam[0]
+		self.force_horizontal=apdlParam[1]
+		self.force_verticle=apdlParam[2]
+		self.moment_slewing=apdlParam[3]
+		self.windPressure=apdlParam[4]
+		self.noMastType=apdlParam[5]
+		self.noAnchorage=apdlParam[6]
+		self.noPoint=apdlParam[7]
+		self.strMQ=apdlParam[8]
+        self.strML=apdlParam[8]
+        self.strMWA=apdlParam[10]
+        self.strMC0=apdlParam[11]
+        self.strMH=apdlParam[12]
+        self.strMXS=apdlParam[13]
+        self.strMIyy=apdlParam[14]
+        self.strMIzz=apdlParam[15]
+        self.strHA=apdlParam[16]
+        self.strZC=apdlParam[17]
+        self.outDirectory=apdlParam[18]
+
+
 
     def parameteransys(self):
 
+
+        # apdlTxt=apdlTxt %(str(Mtop),str(Fh),str(Fv),"0",str(windPressure),str(len(mastType)),str(noAnchorage),str(noAnchorage+len(mastType)+1),strMQ,strML,strMWA,strMC0,strMH,strMXS,strMIyy,strMIzz,strHA,strZC,outDirectory,str(nthStage))
         apdlTxt=apdlTxt %(
-            str(moment),
-            str(force_horizontal),
-            str(___),
-            str(___),
-            str(len(self.listAnchor0)),
-            str(len(self.listAnchor0)+n_mast_type+1),
-            listTostr(mastQuantity),
-            listTostr(mastLength),
-            listTostr(mastWindArea),
-            listTostr(mastC0),
-            listTostr(mastH),
-            listTostr(mastXSection),
-            listTostr(mastIyy),
-            listTostr(mastIzz),
-            listTostr(hAnchorage),
-            listTostr(Z_coor)
+            self.moment,
+            self.force_horizontal,
+            self.force_verticle,
+            self.moment_slewing,
+            self.windPressure,
+            self.noMastType,
+            self.noAnchorage,
+            self.noPoint,
+            self.strMQ,
+            self.strML,
+            self.strMWA,
+            self.strMC0,
+            self.strMH,
+            self.strMXS,
+            self.mastIyy,
+            self.mastIzz,
+            self.strHA,
+            self.strZC,
+            self.outDirectory
             )
