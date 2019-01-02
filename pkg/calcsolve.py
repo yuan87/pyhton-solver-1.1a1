@@ -520,7 +520,9 @@ class case_reader():
 			pickle.dump(self.dictData,c_read_data)
 
 		lmastH=list()
-		lstLen=[ele.get('length') for ele in mastProps]
+
+		# lstLen=[ele.get('length') for ele in mastProps]
+		lstLen=[ele.get('length') for ele in mast_data]
 		sumProduct=float()
 		for mq,ll in (zip(mastQuantity,lstLen)):
 			product=mq*ll
@@ -528,7 +530,7 @@ class case_reader():
 			lmastH.append(sumProduct)
 		lmastH0=[0].extend(lmastH)
 
-		out_lst.append(“windpressure”)
+		out_lst.append('windpressure')
 		out_lst.append(str(mastTypeNo))
 		out_lst.append((mastQuantity))
 		out_lst.append([item[0] for item in mastProp]) # length

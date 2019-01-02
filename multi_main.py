@@ -134,16 +134,18 @@ def is_kernel():
 
 if __name__=='__main__':
 
+	default_directory='D:\TYS\Project\python solver 1.1'
 	run_from_kernel=is_kernel()
 
 	if run_from_kernel:
-		path=input('Please key in file location (Folder)')
+		path=input('Please key in file location (Folder)') or default_directory
 	else:
 		path=str(os.path.dirname(os.path.abspath(__file__)))
 	path_text=path.replace('\\','/')+'/'
 	# path_text='D:/TYS/Project/python solver 1.1/'
 	csv_multi=path_text+'MultipleInput.csv'
 
+	print(csv_multi)
 
 	with open(csv_multi) as c_multi:
 		l_main=filter(bool,list(csv.reader(c_multi)))

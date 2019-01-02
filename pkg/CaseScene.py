@@ -53,7 +53,7 @@ class CaseSceneIns():
         caseReader=case_reader(self.path_text,file_names[0],file_names[1],file_names[2],file_names[3],file_names[4],file_names[5],file_names[6],file_names[7])
         # unpickle
         with open(self.path_text+'ReadData.pkl','rb') as r_data:
-            dictData=.loads(r_data.read())
+            dictData=pickle.loads(r_data.read())
         # dictData=caseReader.dictData
 
         self.run_solve(self.path_text,dictData)
